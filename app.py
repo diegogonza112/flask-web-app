@@ -1,19 +1,19 @@
-from flask import Flask
+import random
+
+from flask import Flask, render_template
 
 app = Flask(__name__)
 
 
-@app.route("/")
-def index():
-    return "Welcome to index page"
+@app.route('/')
+def home():
+    return render_template('home.html')
 
 
-@app.route("/hi/")
-def who():
-    return "who are you"
+@app.route("/about/")
+def about():
+    return str(open('coverletter2021.txt', 'r').readlines())
 
 
-@app.route("/hi/<username>")
-def greet(username):
-    return f"Hi there {username}"
-
+if __name__ == '__main__':
+    app.run()
