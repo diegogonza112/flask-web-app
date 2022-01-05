@@ -1,8 +1,9 @@
-import random
-
 from flask import Flask, render_template
 
 app = Flask(__name__)
+
+# instructions can be found in the README.md file.
+# this is the file that has to be run in order to begin execution of the program
 
 
 @app.route('/')
