@@ -1,8 +1,8 @@
-import __main__
+
 from flask import Flask, render_template, request, redirect
 from werkzeug.exceptions import abort
 
-from models import db, EmployeeModel
+from models import db, ProductModel
 
 app = Flask(__name__)
 
@@ -22,57 +22,59 @@ def home():
         return render_template('home.html')
 
     if request.method == 'POST':
-        employee_id = request.form['employee_id']
-        name = request.form['name']
-        age = request.form['age']
-        position = request.form['position']
-        employee = EmployeeModel(employee_id=employee_id, name=name, age=age,
-                                 position=position)
-        db.session.add(employee)
+        product_id = request.form['product_id']
+        product_name = request.form['product_name']
+        quant = request.form['quantity']
+        category = request.form['product_category']
+        product = ProductModel(product_id=product_id, product_name=product_name,
+                               quantity=quant,
+                               product_category=category)
+        db.session.add(product)
         db.session.commit()
         return redirect('/data')
 
 
 @app.route('/data')
 def RetrieveList():
-    employees = EmployeeModel.query.all()
-    return render_template('datalist.html', employees=employees)
+    products = ProductModel.query.all()
+    return render_template('datalist.html', products=products)
 
 
 @app.route('/data/<int:id>')
-def RetrieveEmployee(id_):
-    employee = EmployeeModel.query.filter_by(employee_id=id_).first()
-    if employee:
-        return render_template('data.html', employee=employee)
-    return f"Employee with id ={id_} Doenst exist"
+def RetrieveProduct(id_):
+    product = ProductModel.query.filter_b(product_id=id_).first()
+    if product:
+        return render_template('data.html', product=product)
+    return f"Product with id ={id_} Doesnt exist"
 
 
 @app.route('/data/<int:id>/update', methods=['GET', 'POST'])
 def update(id_):
-    employee = EmployeeModel.query.filter_by(employee_id=id_).first()
+    product = ProductModel.query.filter_by(product_id=id_).first()
     if request.method == 'POST':
-        if employee:
-            db.session.delete(employee)
+        if product:
+            db.session.delete(product)
             db.session.commit()
-            name = request.form['name']
-            age = request.form['age']
-            position = request.form['position']
-            employee = EmployeeModel(employee_id=id_, name=name, age=age,
-                                     position=position)
-            db.session.add(employee)
+            product_name = request.form['product_name']
+            quant = request.form['quantity']
+            category = request.form['product_category']
+            product = ProductModel(product_id=id_, product_name=product_name,
+                                   quantity=quant,
+                                   product_category=category)
+            db.session.add(product)
             db.session.commit()
             return redirect(f'/data/{id_}')
-        return f"Employee with id = {id_} Does not exist"
+        return f"Product with id = {id_} Does not exist"
 
-    return render_template('update.html', employee=employee)
+    return render_template('update.html', product=product)
 
 
 @app.route('/data/<int:id>/delete', methods=['GET', 'POST'])
 def delete(id_):
-    employee = EmployeeModel.query.filter_by(employee_id=id_).first()
+    product = ProductModel.query.filter_b(product_id=id_).first()
     if request.method == 'POST':
-        if employee:
-            db.session.delete(employee)
+        if product:
+            db.session.delete(product)
             db.session.commit()
             return redirect('/data')
         abort(404)

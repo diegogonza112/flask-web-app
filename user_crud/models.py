@@ -3,20 +3,21 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-class EmployeeModel(db.Model):
+class ProductModel(db.Model):
     __tablename__ = "table"
 
     id = db.Column(db.Integer, primary_key=True)
-    employee_id = db.Column(db.Integer(), unique=True)
-    name = db.Column(db.String())
-    age = db.Column(db.Integer())
-    position = db.Column(db.String(80))
+    product_id = db.Column(db.Integer(), unique=True)
+    product_name = db.Column(db.String())
+    quantity = db.Column(db.Integer())
+    product_category = db.Column(db.String(80))
 
-    def __init__(self, employee_id, name, age, position):
-        self.employee_id = employee_id
-        self.name = name
-        self.age = age
-        self.position = position
+    def __init__(self, product_id, product_name, quantity, product_category):
+        self.product_id = product_id
+        self.product_name = product_name
+        self.quantity = quantity
+        self.product_category = product_category
 
     def __repr__(self):
-        return f"{self.name}:{self.employee_id}"
+        return f"{self.product_name} | id: {self.product_id} | " \
+               f"Quantity: {self.quantity} | Category: {self.product_category}"
