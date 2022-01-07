@@ -1,10 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-<form action='' method="post">
-    Click YES to confirm
-    <input type = "submit" value="YES">
-    <a href='/data'>Cancel</a>
-</form>
-{% endblock %}
 
+    Click YES to confirm
+
+    <form action='' method="POST">
+        <input type="hidden" name="btn_identifier" value="delete" />
+        <input type="submit" value="YES"/>
+    </form>
+    <form action='' method="POST">
+        <input type="hidden" name="btn_identifier" value="cancel" />
+        <input type="submit" value="Cancel"/>
+    </form>
+{% endblock %}

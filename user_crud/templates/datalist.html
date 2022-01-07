@@ -2,8 +2,22 @@
 {% block content %}
 <h1>Name | Id | Quantity | Category</h1>
 {% for employee in products %}
-    <h3>{{employee}}</h3><hr>
+    <body>{{employee}}
+        <form action='' method="POST">
+            <input type="hidden" name="btn_identifier" value="delete" />
+            <input type="hidden" name="id" value={{employee.product_id}} />
+            <input type="submit" value="Delete"/>
+        </form>
+        <form action='' method="POST">
+            <input type="hidden" name="btn_identifier" value="edit" />
+            <input type="hidden" name="id" value={{employee.product_id}} />
+            <input type="submit" value="Edit"/>
+        </form>
+    </body><hr>
 {% endfor %}
+<a href="{{ url_for('download', filename='product_info.csv') }}">
+    <input type="submit" value="Get .csv File"/>
+</a>
 <form action='' method="POST">
     <input type="hidden" name="btn_identifier" value="home" />
     <input type="submit" value="Home"/>

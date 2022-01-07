@@ -1,10 +1,8 @@
-import os
-
-from flask import Flask, current_app, render_template, request, redirect, \
-    send_file, send_from_directory
+from flask import Flask, redirect, render_template, request, send_from_directory
 from werkzeug.exceptions import abort
 
-from models import db, ProductModel
+from models import ProductModel, db
+from user_crud.generate_IDs import generate_id
 
 app = Flask(__name__)
 
@@ -25,24 +23,25 @@ def home():
 
     if request.method == 'POST':
         if request.form['btn_identifier'] == 'newInput':
-            product_id = request.form['product_id']
+            product_id = generate_id()
             product_name = request.form['product_name']
             quant = request.form['quantity']
             category = request.form['product_category']
-            product = ProductModel(product_id=product_id,
-                                   product_name=product_name,
-                                   quantity=quant,
-                                   product_category=category)
-            csv_row = f"{product_name}, {quant}, {category}, {product_id}"
-            with open('product_info.csv', 'a') as fd:
-                fd.write(csv_row)
-            db.session.add(product)
-            db.session.commit()
-            return redirect('/data')
+            if product_name and quant and category:
+                product = ProductModel(product_id=product_id,
+                                       product_name=product_name,
+                                       quantity=quant,
+                                       product_category=category)
+                csv_row = f"{product_name}, {quant}, {category}, {product_id}\n"
+                with open('product_info.csv', 'a') as fd:
+                    fd.write(csv_row)
+                db.session.add(product)
+                db.session.commit()
+                return redirect('/data')
+            else:
+                return redirect('/error-h')
         if request.form['btn_identifier'] == 'showData':
             return redirect('/data')
-        if request.form['btn_identifier'] == 'getCSV':
-            return redirect('/download')
 
 
 @app.route('/data', methods=['GET', 'POST'])
@@ -51,30 +50,27 @@ def RetrieveList():
         products = ProductModel.query.all()
         return render_template('datalist.html', products=products)
     if request.method == 'POST':
-        return redirect('/')
-
-
-@app.route('/data/<int:id>')
-def RetrieveProduct(id_):
-    product = ProductModel.query.filter_b(product_id=id_).first()
-    if product:
-        return render_template('data.html', product=product)
-    return f"Product with id ={id_} Doesnt exist"
+        if request.form["btn_identifier"] == 'home':
+            return redirect('/')
+        if request.form["btn_identifier"] == "edit":
+            return redirect(f'/data/{request.form["id"]}/update')
+        if request.form["btn_identifier"] == "delete":
+            return redirect(f'/data/{request.form["id"]}/delete')
 
 
 @app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
-def download(filename):
-    # Appending app path to upload folder path within app root folder
-    uploads = os.path.join(current_app.root_path, app.config['UPLOAD_FOLDER'])
-    # Returning file from appended path
-    return send_from_directory(directory=uploads, filename=filename)
+def download():
+    return send_from_directory(directory='/user_crud',
+                               filename='product_info.csv')
 
 
-@app.route('/data/<int:id>/update', methods=['GET', 'POST'])
+@app.route('/data/<int:id_>/update', methods=['GET', 'POST'])
 def update(id_):
     product = ProductModel.query.filter_by(product_id=id_).first()
     if request.method == 'POST':
-        if product:
+        if request.form["btn_identifier"] == 'back':
+            return redirect('/data')
+        if request.form["btn_identifier"] == 'submit' and product:
             db.session.delete(product)
             db.session.commit()
             product_name = request.form['product_name']
@@ -83,19 +79,22 @@ def update(id_):
             product = ProductModel(product_id=id_, product_name=product_name,
                                    quantity=quant,
                                    product_category=category)
-            db.session.add(product)
-            db.session.commit()
-            return redirect(f'/data/{id_}')
-        return f"Product with id = {id_} Does not exist"
-
+            if id_ and product_name and quant and category:
+                db.session.add(product)
+                db.session.commit()
+                return redirect('/data')
+            else:
+                return redirect(f'/error-e/{id_}')
     return render_template('update.html', product=product)
 
 
-@app.route('/data/<int:id>/delete', methods=['GET', 'POST'])
+@app.route('/data/<int:id_>/delete', methods=['GET', 'POST'])
 def delete(id_):
-    product = ProductModel.query.filter_b(product_id=id_).first()
+    product = ProductModel.query.filter_by(product_id=id_).first()
     if request.method == 'POST':
-        if product:
+        if request.form["btn_identifier"] == "cancel":
+            return redirect('/data')
+        if request.form["btn_identifier"] == "delete" and product:
             db.session.delete(product)
             db.session.commit()
             return redirect('/data')
@@ -104,9 +103,25 @@ def delete(id_):
     return render_template('delete.html')
 
 
-@app.route('/about/')
+@app.route('/about/', methods=['GET', 'POST'])
 def about():
+    if request.method == 'POST':
+        return redirect('/')
     return render_template('text.html')
+
+
+@app.route('/error-h', methods=['GET', 'POST'])
+def error1():
+    if request.method == 'POST':
+        return redirect('/')
+    return render_template('error_home.html')
+
+
+@app.route('/error-e/<int:id_>', methods=['GET', 'POST'])
+def error2(id_):
+    if request.method == 'POST':
+        return redirect(f'/data/{id_}/update')
+    return render_template('error_edit.html')
 
 
 if __name__ == "__main__":

@@ -2,9 +2,14 @@
 
 {% block content %}
 <form action='' method = "POST">
-    <p>name <input type = "text" name = "name" value="{{product.product_name}}"/></p>
-    <p>age <input type = "integer" name = "age"  value="{{product.quantity}}"/></p>
-    <p>position <input type = "text" name = "position" value="{{product.product_category}}"/></p>
-    <p><input type = "submit" value = "Submit" /></p>
+    <p>Name <input type = "text" name = "product_name" value="{{product.product_name}}"/></p>
+    <p>Quantity <input type = "integer" name = "quantity"  value="{{product.quantity}}"/></p>
+    <p>Category <input type = "text" name = "product_category" value="{{product.product_category}}"/></p>
+    <p><input type="hidden" name="btn_identifier" value="submit" />
+        <input type = "submit" value = "Submit" /></p>
+</form>
+<form action='' method="POST">
+    <input type="hidden" name="btn_identifier" value="back" />
+    <input type="submit" value="Back"/>
 </form>
 {% endblock %}

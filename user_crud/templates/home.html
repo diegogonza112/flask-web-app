@@ -2,6 +2,18 @@
 {% block content %}
 <h1>{% block title %} Simple CRUD Web App {% endblock %}</h1>
 <h2>{% block subtitle %} By Diego Gonzalez Delgado {% endblock %}</h2>
+<body>
+<p>
+    The purpose of this local web app is as a proof of concept in order to demonstrate my ability to create
+(a rather crude, albeit functional) web application that displays CRUD functionality
+(the ability to Create, Read, Update, Delete some instance of data, in this case the instance of data is a product object).
+</p>
+<p>
+    To get started, you can either add new instances of Product in the input form
+below, or you can view the pre-loaded products by downloading the .csv file, or you
+can view and edit them in the Show all Data page.
+</p>
+</body>
 {% for post in posts %}
 <a href="{{ url_for('post', post_id=post['id']) }}">
     <h2>{{ post['title'] }}</h2>
@@ -14,18 +26,15 @@
 {% endfor %}
 
 <form action='' method = "POST">
-    <p>Product Id <input type = "integer" name = "product_id" /></p>
     <p>Name <input type = "text" name = "product_name" /></p>
     <p>Quantity <input type = "integer" name = "quantity" /></p>
     <p>Category <input type = "text" name = "product_category" /></p>
     <input type="hidden" name="btn_identifier" value="newInput" />
     <p><input type = "submit" value = "Submit" /></p>
 </form>
-<form action='' method="POST">
-    <a href="{{ url_for('download', filename='product_info.csv') }}"></a>
-    <input type="hidden" name="btn_identifier" value="getCSV" />
+    <a href="{{ url_for('download', filename='product_info.csv') }}">
     <input type="submit" value="Get .csv File"/>
-</form>
+    </a>
 <form action='' method="POST">
     <input type="hidden" name="btn_identifier" value="showData" />
     <input type="submit" value="Show all Data"/>
