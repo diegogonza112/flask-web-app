@@ -59,9 +59,9 @@ def RetrieveList():
 
 
 @app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
-def download():
+def download(filename):
     return send_from_directory(directory='/user_crud',
-                               filename='product_info.csv')
+                               filename=filename)
 
 
 @app.route('/data/<int:id_>/update', methods=['GET', 'POST'])
