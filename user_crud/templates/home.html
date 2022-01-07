@@ -18,7 +18,17 @@
     <p>Name <input type = "text" name = "product_name" /></p>
     <p>Quantity <input type = "integer" name = "quantity" /></p>
     <p>Category <input type = "text" name = "product_category" /></p>
+    <input type="hidden" name="btn_identifier" value="newInput" />
     <p><input type = "submit" value = "Submit" /></p>
+</form>
+<form action='' method="POST">
+    <a href="{{ url_for('download', filename='product_info.csv') }}"></a>
+    <input type="hidden" name="btn_identifier" value="getCSV" />
+    <input type="submit" value="Get .csv File"/>
+</form>
+<form action='' method="POST">
+    <input type="hidden" name="btn_identifier" value="showData" />
+    <input type="submit" value="Show all Data"/>
 </form>
 {% endblock %}
 
