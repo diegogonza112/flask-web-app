@@ -1,7 +1,6 @@
-from flask import Flask, Response, redirect, render_template, request, \
-    send_file, \
-    send_from_directory
+from flask import Flask, redirect, render_template, request, send_file
 from werkzeug.exceptions import abort
+from csv_editor import CSVEdit
 
 from models import ProductModel, db
 from user_crud.generate_IDs import generate_id
@@ -86,6 +85,7 @@ def update(id_):
                                    quantity=quant,
                                    product_category=category)
             if id_ and product_name and quant and category:
+                CSVEdit(id_).edit_row(product_name, quant, category)
                 db.session.add(product)
                 db.session.commit()
                 return redirect('/data')
@@ -101,6 +101,7 @@ def delete(id_):
         if request.form["btn_identifier"] == "cancel":
             return redirect('/data')
         if request.form["btn_identifier"] == "delete" and product:
+            CSVEdit(id_).delete_row()
             db.session.delete(product)
             db.session.commit()
             return redirect('/data')
