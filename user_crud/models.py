@@ -19,5 +19,5 @@ class ProductModel(db.Model):
         self.product_category = product_category
 
     def __repr__(self):
-        return f"{self.product_name} | {self.product_id} | " \
-               f"{self.quantity} | {self.product_category}"
+        return f"{self.product_name} | {self.quantity} | " \
+               f"{self.product_category}| {self.product_id}"

@@ -2,9 +2,9 @@
 
 {% block content %}
 <form action='' method = "POST">
-    <p>Name <input type = "text" name = "product_name" value="{{product.product_name}}"/></p>
+    <p>Product Name <input type = "text" name = "product_name" value="{{product.product_name}}"/></p>
     <p>Quantity <input type = "integer" name = "quantity"  value="{{product.quantity}}"/></p>
-    <p>Category <input type = "text" name = "product_category" value="{{product.product_category}}"/></p>
+    <p>Product Category <input type = "text" name = "product_category" value="{{product.product_category}}"/></p>
     <p><input type="hidden" name="btn_identifier" value="submit" />
         <input type = "submit" value = "Submit" /></p>
 </form>

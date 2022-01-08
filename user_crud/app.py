@@ -1,4 +1,6 @@
-from flask import Flask, redirect, render_template, request, send_from_directory
+from flask import Flask, Response, redirect, render_template, request, \
+    send_file, \
+    send_from_directory
 from werkzeug.exceptions import abort
 
 from models import ProductModel, db
@@ -23,11 +25,11 @@ def home():
 
     if request.method == 'POST':
         if request.form['btn_identifier'] == 'newInput':
-            product_id = generate_id()
             product_name = request.form['product_name']
             quant = request.form['quantity']
             category = request.form['product_category']
             if product_name and quant and category:
+                product_id = generate_id()
                 product = ProductModel(product_id=product_id,
                                        product_name=product_name,
                                        quantity=quant,
@@ -60,8 +62,12 @@ def RetrieveList():
 
 @app.route('/uploads/<path:filename>', methods=['GET', 'POST'])
 def download(filename):
-    return send_from_directory(directory='/user_crud',
-                               filename=filename)
+    return send_file(
+        path_or_file=filename,
+        mimetype="text/csv",
+        as_attachment=True,
+        attachment_filename=filename,
+        cache_timeout=0)
 
 
 @app.route('/data/<int:id_>/update', methods=['GET', 'POST'])

@@ -26,14 +26,14 @@ can view and edit them in the Show all Data page.
 {% endfor %}
 
 <form action='' method = "POST">
-    <p>Name <input type = "text" name = "product_name" /></p>
+    <p>Product Name <input type = "text" name = "product_name" /></p>
     <p>Quantity <input type = "integer" name = "quantity" /></p>
-    <p>Category <input type = "text" name = "product_category" /></p>
+    <p>Product Category <input type = "text" name = "product_category" /></p>
     <input type="hidden" name="btn_identifier" value="newInput" />
     <p><input type = "submit" value = "Submit" /></p>
 </form>
     <a href="{{ url_for('download', filename='product_info.csv') }}">
-    <input type="submit" value="Get .csv File"/>
+        <input type="submit" value="Get .csv File"/>
     </a>
 <form action='' method="POST">
     <input type="hidden" name="btn_identifier" value="showData" />

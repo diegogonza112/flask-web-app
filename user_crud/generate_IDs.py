@@ -15,5 +15,3 @@ def generate_id():
 
     return str(x)
 
-
-print(generate_id())
