@@ -17,7 +17,7 @@ class CSVEdit:
 
                 for field in row:
 
-                    if self.id_ in field:
+                    if str(self.id_) in field:
                         lines.remove(row)
 
         with open('product_info.csv', 'w') as writeFile:
